@@ -9,8 +9,9 @@ const limit = 10
 let offset = 0;
 
 function convertPokemonToLi(pokemon) {
+    // adição de evento: onclick="verDetalhes(${pokemon.number})"
     return `
-        <li class="pokemon ${pokemon.type}" data-id="${pokemon.number}">
+        <li class="pokemon ${pokemon.type}" data-id="${pokemon.number}" onclick="verDetalhes(${pokemon.number})">
             <span class="number">#${pokemon.number}</span>
             <span class="name">${pokemon.name}</span>
 
@@ -48,7 +49,7 @@ loadMoreButton.addEventListener('click', () => {
         loadPokemonItens(offset, limit)
     }
 })
-
+// funçao que gera seção de detalhes do pokemon
 function appearPokemonDetails(pokemon) {
     const pokemonsDetailsHTML = `
         <section class="detail-content ${pokemon.type}">
@@ -101,17 +102,12 @@ function appearPokemonDetails(pokemon) {
     return pokemonAppear.innerHTML = pokemonsDetailsHTML
 }
 
-pokemonList.addEventListener('click', (event) => {
-    try {
-        if (event.target.classList.contains('pokemon')) {
-            const selectedPokemonId = event.target.dataset.id;
-            pokeApi.getPokemonDetailById(selectedPokemonId).then((pokemon) => appearPokemonDetails(pokemon))
-        }
-    } catch (error) {
-        console.error(error)
-    }
-});
+// funçao para clicar no pokemon e ver detalhes
+function verDetalhes(selectedPokemonId) {
+    pokeApi.getPokemonDetailById(selectedPokemonId).then((pokemon) => appearPokemonDetails(pokemon))
+}
 
+// Funçao do botao "x" da seçao dos detalhes do pokemon
 function closeDetailBtn() {
     return pokemonAppear.innerHTML = `
         <ol id="pokemonAppear" class="">
